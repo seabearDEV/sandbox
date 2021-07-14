@@ -30,9 +30,10 @@ const createMap = function(dimension, flat, saveFile) {
     }
 
     function saveMap(data) {
-        writeFile(`map-${dimension * dimension}.json`, JSON.stringify(data), (err) => {
+        const filename = `map-${dimension * dimension}.json`;
+        writeFile(filename, JSON.stringify(data), (err) => {
             if (err) throw err;
-            console.log('JSON has been saved.');
+            console.log(`---\nJSON has been saved as ${filename}`);
         });
     }
 
@@ -76,4 +77,3 @@ const map = createMap(4, true, true);
 const t1 = performance.now();
 
 console.log(`Map with ${sectors} sectors created in ${t1 - t0} milliseconds.`);
-console.log(map[15]);
