@@ -5,9 +5,9 @@ let sectors;
 
 /**
  * Function that returns a 2 dimensional array where each cell is aware of its surrounding neighbors and its own position in the array.
- * @param       {number}    dimension   This number will be the height and width of the 2 dimensional array
- * @param       {boolean}   flat        Set true if you want the array flattened into a 1 dimensional array
- * @param       {boolean}   saveFile    Set true if you want to save the array to a json file
+ * @param   {number}    dimension   This number will be the height and width of the 2 dimensional array
+ * @param   {boolean}   flat        Set true if you want the array flattened into a 1 dimensional array
+ * @param   {boolean}   saveFile    Set true if you want to save the array to a json file
  */
 const createMap = function(dimension, flat, saveFile) {
     let count = 0,
