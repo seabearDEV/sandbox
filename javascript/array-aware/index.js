@@ -9,7 +9,7 @@ let sectors;
  * @param   {boolean}   flat        Set true if you want the array flattened into a 1 dimensional array
  * @param   {boolean}   saveFile    Set true if you want to save the array to a json file
  */
-const createMap = function(dimension, flat, saveFile) {
+function createMap(dimension, flat, saveFile) {
     let count = 0,
         data = [],
         map;
@@ -41,16 +41,14 @@ const createMap = function(dimension, flat, saveFile) {
         let row = [];
 
         for (let j = 0; j < dimension; j += 1) {
-            row.push(
-                {
-                    id: count,
-                    neighbors: findNeighbors(i),
-                    position: {
-                        x: j,
-                        y: i,
-                    }
+            row.push({
+                id: count,
+                neighbors: findNeighbors(i),
+                position: {
+                    x: j,
+                    y: i,
                 }
-            );
+            });
 
             count += 1;
         }
@@ -73,7 +71,7 @@ const createMap = function(dimension, flat, saveFile) {
 };
 
 const t0 = performance.now();
-const map = createMap(4, true, true);
+createMap(5, true, true);
 const t1 = performance.now();
 
 console.log(`Map with ${sectors} sectors created in ${t1 - t0} milliseconds.`);
