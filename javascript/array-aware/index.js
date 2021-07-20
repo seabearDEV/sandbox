@@ -1,8 +1,6 @@
 import { writeFile } from 'fs';
 import { performance } from 'perf_hooks';
 
-let sectors;
-
 /**
  * Function that returns a 2 dimensional array where each cell is aware of its surrounding neighbors and its own position in the array.
  * @param   {number}    dimension   This number will be the height and width of the 2 dimensional array
@@ -72,8 +70,10 @@ const createMap = function(dimension, flat, saveFile) {
     return map;
 };
 
+let sectors;
+
 const t0 = performance.now();
-const map = createMap(4, true, true);
+createMap(256, true, true);
 const t1 = performance.now();
 
 console.log(`Map with ${sectors} sectors created in ${t1 - t0} milliseconds.`);
