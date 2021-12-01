@@ -1,2 +1,6 @@
 
 .DS_Store
+
+javascript/apple-inventory/node_modules/
+
+nodejs/discord/bot-alpha/node_modules/
