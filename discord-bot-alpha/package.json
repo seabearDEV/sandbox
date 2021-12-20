@@ -1,0 +1,21 @@
+{
+  "name": "bot-alpha",
+  "version": "1.0.0",
+  "description": "Alpha level Discord bot",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KoryHoopes/sandbox/nodejs/discord/bot-alpha"
+  },
+  "author": "Kory Hoopes",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/builders": "^0.8.2",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "discord-api-types": "^0.25.2",
+    "discord.js": "^13.3.1"
+  }
+}
