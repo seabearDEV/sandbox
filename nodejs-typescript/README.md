@@ -1,6 +1,6 @@
 # nodejs-typescript
 
-This is a template useful for projects wanting to use TypeScript in Node.js with a testing framework.
+This is a template useful for projects wanting to use TypeScript in Node.js with a testing framework. Code goes in the src/app folder and tests follow the same structure in the src/tests folder.
 
 ## Primary Technologies
 
