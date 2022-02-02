@@ -2,41 +2,39 @@ const global = require('./filetypes-global').sort();
 const symantec = require('./filetypes-symantec').sort();
 
 const globalDelta = compare(global, symantec, true);
-const symantecDelta = compare(symantec, global, true);
-const overlap = compare(symantec, global);
+const symantecDelta = compare(global, symantec, true);
+const overlap = compare(global, symantec);
 
 function compare(array1, array2, delta) {
+    const find = (filetype1) => longArray.find(filetype2 => {
+        if (filetype2 === filetype1) {
+            return true;
+        }
+    });
+    let longArray,
+        shortArray;
+
+    if (array1.length <= array2.length) {
+        shortArray = array1;
+        longArray = array2;
+    } else {
+        shortArray = array2;
+        longArray = array1;
+    }
+
     if (delta) {
-        return array1.filter(filetype1 => {
-            if (!array2.find(filetype2 => filetype2 === filetype1)) {
-                debugger;
+        return shortArray.filter(filetype1 => {
+            if (!find(filetype1)) {
                 return filetype1;
             }
         });
     }
 
-    return array1.filter(filetype1 => {
-        if (array2.find(filetype2 => filetype2 === filetype1)) {
+    return shortArray.filter(filetype1 => {
+        if (find(filetype1)) {
             return filetype1;
         }
     });
-}
-
-function compare2(array1, array2, delta) {
-    let shortArray,
-        longArray;
-    
-    if (array1.length > array2.length) {
-        shortArray = array2;
-        longArray = array1;
-    }
-
-    shortArray = array1;
-    longArray = array2;
-
-    if (delta) {
-
-    }
 }
 
 console.log(
