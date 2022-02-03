@@ -1,57 +1,33 @@
-const global = require('./filetypes-global').sort();
-const symantec = require('./filetypes-symantec').sort();
+const boyNames2000 = require('./boy-names-2000').sort();
+const boyNames2020 = require('./boy-names-2020').sort();
 
-const globalDelta = compare(global, symantec, true);
-const symantecDelta = compare(global, symantec, true);
-const overlap = compare(global, symantec);
+const boyNames2000Delta = compare(boyNames2000, boyNames2020, true);
+const boyNames2020Delta = compare(boyNames2020, boyNames2000, true);
+const overlap = compare(boyNames2000, boyNames2020);
 
 function compare(array1, array2, delta) {
-    const find = (filetype1) => longArray.find(filetype2 => {
-        if (filetype2 === filetype1) {
-            return true;
-        }
-    });
-    let longArray,
-        shortArray;
+    const
+        findItem = (item1) => array2.find(item2 => item2 === item1),
+        findDelta = (item1) => delta ? !findItem(item1) : findItem(item1);
 
-    if (array1.length <= array2.length) {
-        shortArray = array1;
-        longArray = array2;
-    } else {
-        shortArray = array2;
-        longArray = array1;
-    }
-
-    if (delta) {
-        return shortArray.filter(filetype1 => {
-            if (!find(filetype1)) {
-                return filetype1;
-            }
-        });
-    }
-
-    return shortArray.filter(filetype1 => {
-        if (find(filetype1)) {
-            return filetype1;
-        }
-    });
+    return array1.filter(item1 => findDelta(item1));
 }
 
 console.log(
 `
-Global File Types (${global.length}):
-${global}
+Boy Names Year 2000 (${boyNames2000.length}):
+${boyNames2000}
 
-Global Delta (${globalDelta.length}):
-${globalDelta}
+Boy Names Year 2000 Delta (${boyNames2000Delta.length}):
+${boyNames2000Delta}
 
-Symantec File Types (${symantec.length}):
-${symantec}
+Boy Names Year 2020  (${boyNames2020.length}):
+${boyNames2020}
 
-Symantec Delta (${symantecDelta.length}):
-${symantecDelta}
+Boy Names Year 2020 Delta (${boyNames2020Delta.length}):
+${boyNames2020Delta}
 
-Overlapped File Types (${overlap.length}):
+Boy Names in both Years (${overlap.length}):
 ${overlap}
 `
 );
