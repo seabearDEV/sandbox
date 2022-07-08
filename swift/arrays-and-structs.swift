@@ -11,15 +11,16 @@ struct Number: ArrayItem {
 }
 
 // Variables
-var start: Double
-var end: Double
-var totalTime: Double
 var array: [ArrayItem] = [ArrayItem]()
-
+let itemCount: Int = 100_000
+let itemDisplay: Int = 100
+var end: Double
+var start: Double
+var totalTime: Double
 
 // Start time for creating array
 start = Date().timeIntervalSince1970
-for i: Int in 1...11 {
+for i: Int in 1...itemCount {
     array.append(Number(number: i))
 }
 // End time for creating array
@@ -32,8 +33,8 @@ totalTime = {
 
 // Print out items in array
 for (index, item) in array.enumerated() {
-    if index == 10 {
-        print("I'm only printing 10 of these things.")
+    if index == itemDisplay {
+        print("I'm only printing \(itemDisplay) of these things.")
         
         break
     } else {
