@@ -16,7 +16,6 @@ var end: Double
 var totalTime: Double
 var array: [ArrayItem] = [ArrayItem]()
 
-
 // Start time for creating array
 start = Date().timeIntervalSince1970
 for i: Int in 1...11 {
@@ -31,7 +30,7 @@ totalTime = {
 }()
 
 // Print out items in array
-for (index, item) in array.enumerated() {
+for (index: Int, item: ArrayItem) in array.enumerated() {
     if index == 10 {
         print("I'm only printing 10 of these things.")
         
