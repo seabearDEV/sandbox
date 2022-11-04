@@ -1,0 +1,18 @@
+{
+  "name": "docker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "debug": "nodemon --inspect=0.0.0.0:9229 server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.20",
+    "ronin-database": "^0.1.1",
+    "ronin-mocks": "^0.1.11",
+    "ronin-server": "^0.1.3"
+  }
+}
