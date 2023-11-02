@@ -1,0 +1,26 @@
+{
+	"name": "simple-genesis",
+	"version": "1.0.0",
+	"description": "A simplified version of project-genesis.",
+	"type": "module",
+	"main": "index.js",
+	"scripts": {
+		"predev": "rm -rf ./dist",
+		"build": "tsc && sass ./src/public/scss:./dist/public/css",
+		"dev": "tsc -w"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/seabearDEV/sandbox.git"
+	},
+	"author": "Kory Hoopes",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/seabearDEV/sandbox/issues"
+	},
+	"homepage": "https://github.com/seabearDEV/sandbox#readme",
+	"devDependencies": {
+		"sass": "^1.69.5",
+		"typescript": "^5.2.2"
+	}
+}
