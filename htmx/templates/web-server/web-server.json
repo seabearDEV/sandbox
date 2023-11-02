@@ -1,0 +1,58 @@
+{
+	"build-js": {
+		"syncCommands": [
+			{
+				"description": "Remove the /dist folder",
+				"run": "rm -rf ./dist",
+				"message": "The /dist folder has been deleted."
+			}
+		],
+		"asyncCommands": {
+			"group1": [
+				{
+					"description": "Run the TypeScript Compiler (tsc)",
+					"run": "tsc",
+					"message": "The TypeScript Compiler has run successfully."
+				},
+				{
+					"description": "Run the SASS Compiler (sass)",
+					"run": "sass ./src/public/css:./dist/public/css",
+					"message": "The SASS Compiler has run successfully."
+				}
+			],
+			"group2": [
+				{
+					"description": "Copy HTML to the /dist folder",
+					"run": "cp -r ./src/public/html/* ./dist/public",
+					"message": "Successfully copied all HTML to the /dist/public/html folder."
+				}
+			]
+		}
+	},
+	"genesis-js": {
+		"syncCommands": [
+			{
+				"description": "Refresh ./src directory",
+				"run": "rm -rf ./src && mkdir ./src",
+				"message": "The ./dist folder has been deleted."
+			},
+			{
+				"description": "Copy web-server template files to the /src folder",
+				"run": "cp -r ./templates/web-server/src/* ./src",
+				"message": "The web-server template files have been copied to the ./src folder."
+			}
+		]
+	},
+	"package-json": {
+		"scripts": {
+			"dev:watch": "concurrently \"chokidar './src/public/html' -c 'npm run build'\" \"sass --watch ./src/public/css:./dist/public/css\" \"tsc --watch\""
+		},
+		"devDependencies": [
+			"@types/express",
+			"chokidar-cli",
+			"concurrently",
+			"sass"
+		],
+		"dependencies": ["express"]
+	}
+}

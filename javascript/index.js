@@ -71,7 +71,7 @@ function createMap(dimension, flat, saveFile) {
 let sectors;
 
 const t0 = performance.now();
-createMap(5, true, true);
+console.table(createMap(4, false, false));
 const t1 = performance.now();
 
 console.log(`Map with ${sectors} sectors created in ${t1 - t0} milliseconds.`);
