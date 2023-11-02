@@ -1,4 +1,4 @@
-import Foundation
+ import Foundation
 
 // Creating an array of 10 items and then seraching for an element
 var a_01: [Int] = [Int]()
@@ -8,7 +8,7 @@ for i in 1...10 {
 func contains(_ array: [Int], _ item: Int) -> Bool {
     array.contains(item)
 }
-print(contains(a_01, 60))
+print(contains(a_01, 10))
 
 // Creating a struct, adding instances of it to an array, and then searching for an element
 struct StructA {
