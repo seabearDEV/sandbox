@@ -5,15 +5,16 @@
 	"type": "module",
 	"main": "dist/app/index.js",
 	"scripts": {
-		"build-ts": "tsc",
-		"build-scss": "sass ./src/public/css:./dist/public/css",
-		"build-html": "cp -r ./src/public/html ./dist/public",
-		"build-index.html": "cp ./src/public/index.html ./dist/public",
+		"ts-build": "tsc",
+		"ts-watch": "tsc --watch",
+		"scss-build": "sass ./src/public/css:./dist/public/css",
+		"scss-watch": "sass --watch ./src/public/css:./dist/public/css",
+		"html-build": "cp -r ./src/public/html ./dist/public & cp ./src/public/index.html ./dist/public",
+		"html-watch": "chokidar './src/public/html' -c 'npm run html-build'",
 		"prebuild": "rm -rf ./dist",
-		"build": "npm run build-ts && npm run build-scss && npm run build-html",
-		"postbuild": "npm run build-index.html",
-		"predev": "npm run build",
-		"dev": "chokidar './src' -c 'npm run build'"
+		"build": "npm run ts-build && npm run scss-build && npm run html-build",
+		"predev": "rm -rf ./dist",
+		"dev": "npm run ts-watch && npm run scss-watch && npm run html-watch"
 	},
 	"repository": {
 		"type": "git",
