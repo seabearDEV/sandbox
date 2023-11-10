@@ -9,12 +9,13 @@
 		"ts-watch": "tsc --watch",
 		"scss-build": "sass ./src/public/css:./dist/public/css",
 		"scss-watch": "sass --watch ./src/public/css:./dist/public/css",
+		"prehtml-build": "rm -rf ./dist/public/html && mkdir ./dist/public/html",
 		"html-build": "cp -r ./src/public/html ./dist/public & cp ./src/public/index.html ./dist/public",
-		"html-watch": "chokidar './src/public/html' -c 'npm run html-build'",
+		"html-watch": "chokidar './src/public/html' './src/public/index.html' -c 'npm run html-build'",
 		"prebuild": "rm -rf ./dist",
 		"build": "npm run ts-build && npm run scss-build && npm run html-build",
-		"predev": "rm -rf ./dist",
-		"dev": "npm run ts-watch && npm run scss-watch && npm run html-watch"
+		"predev": "npm run build",
+		"dev": "npm run ts-watch & npm run scss-watch & npm run html-watch"
 	},
 	"repository": {
 		"type": "git",
