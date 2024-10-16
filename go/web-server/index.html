@@ -1,0 +1,33 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" , initial-scale="1.0" />
+  <!-- Include the HTMX library -->
+  <script src="https://unpkg.com/htmx.org@2.0.1"></script>
+  <title>Go HTMX</title>
+</head>
+
+<body>
+  <!-- List to display todos -->
+  <ul id="todo-list">
+    <!-- Loop through all todos in the data -->
+    {{range .Todos}}
+    <!-- Define a block for each todo item -->
+    {{block "todo-list-element" .}}
+    <li>{{.Message}}</li>
+    {{end}}
+    {{end}}
+  </ul>
+
+  <!-- Form to add new todos -->
+  <form hx-swap="beforeend" hx-target="#todo-list" hx-post="/add-todo">
+    <label for="message">Message:</label>
+    <input type="text" id="message" name="message" />
+    <button type="submit">Create</button>
+  </form>
+</body>
+
+</html>

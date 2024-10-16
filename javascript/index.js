@@ -53,7 +53,7 @@ function createMap(dimension, flat, saveFile) {
 }
 
 const t0 = performance.now();
-const map = createMap(4, false, true);
-console.table(map);
+const map = createMap(256, false, true);
+// console.table(map);
 const t1 = performance.now();
-console.log(`Map with ${4 * 4} sectors created in ${t1 - t0} milliseconds.`);
+console.log(`Map with ${256 * 256} sectors created in ${t1 - t0} milliseconds.`);
