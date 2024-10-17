@@ -1,1 +1,3 @@
-2024-10-16 https://gobyexample.com/variables
+2024-10-16
+- https://gobyexample.com/variables
+- https://gobyexample.com/constants
