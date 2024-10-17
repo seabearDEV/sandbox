@@ -1,20 +1,25 @@
 package main
 
-import "fmt"
+import "fmt" // Import the fmt package for formatted I/O
 
 func main() {
-	var a = "initial"
-	fmt.Println(a)
-	
-	var b, c int = 1, 2
-	fmt.Println(b, c)
+    // Declare a variable 'a' with an initial value using the var keyword
+    var a = "initial"
+    fmt.Println(a) // Output: "initial"
 
-	var d = true
-	fmt.Println(d)
+    // Declare multiple variables 'b' and 'c' with specified types and initial values
+    var b, c int = 1, 2
+    fmt.Println(b, c) // Output: "1 2"
 
-	var e int
-	fmt.Println(e)
+    // Declare a variable 'd' with an initial boolean value
+    var d = true
+    fmt.Println(d) // Output: "true"
 
-	f := "apple"
-	fmt.Println(f)
+    // Declare a variable 'e' with an explicit type but no initial value (defaults to zero value)
+    var e int
+    fmt.Println(e) // Output: "0"
+
+    // Use short variable declaration to declare and initialize 'f'
+    f := "apple" // Short variable declaration infers the type
+    fmt.Println(f) // Output: "apple"
 }

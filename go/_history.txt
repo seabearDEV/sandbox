@@ -1,3 +1,2 @@
-2024-10-16
-- https://gobyexample.com/variables
-- https://gobyexample.com/constants
+2024-10-16 - https://gobyexample.com/constants
+2024-10-17 - https://gobyexample.com/if-else

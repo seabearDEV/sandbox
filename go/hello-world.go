@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import "fmt" // Import the fmt package for formatted I/O
 
+// main is the entry point of the program
 func main() {
-	fmt.Println("Hello, World!")
+    // Print "Hello, World!" to the console
+    fmt.Println("Hello, World!")
 }
