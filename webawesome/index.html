@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Web Awesome</title>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/styles/themes/tailspin.css" />
+  <link rel="stylesheet" href="https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/styles/webawesome.css" />
+  <link rel="stylesheet" href="/src/style.css" />
+
+  <script type="module" src="https://early.webawesome.com/webawesome@3.0.0-alpha.10/dist/webawesome.loader.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script type="module" src="/src/main.ts"></script>
+</head>
+
+<body>
+  <wa-page class="wa-align-items-center wa-dark">
+    <main>
+
+      <div class="wa-stack wa-align-items-center" x-data="{ count: 0, open: false }">
+        <wa-button class="wa-heading-l" variant="brand" @click="count += 1">
+          Click This Button
+        </wa-button>
+
+        <wa-badge class="wa-body-l" variant="neutral" x-text="count">
+          0
+        </wa-badge>
+
+        <wa-button @click="open = ! open">
+          Toggle
+        </wa-button>
+
+        <wa-card x-show="open" @click.outside="open = false">
+          Contents...
+        </wa-card>
+
+        <div x-data="{
+          search: '',
+          items: ['foo', 'bar', 'baz'],
+        
+          get filteredItems() {
+            return this.items.filter(
+                i => i.startsWith(this.search)
+            )
+          }
+        }">
+          <input x-model="search" placeholder="Search...">
+          <ul>
+            <template x-for="item in filteredItems" :key="item">
+              <li x-text="item"></li>
+            </template>
+          </ul>
+        </div>
+      </div>
+      
+    </main>
+  </wa-page>
+</body>
+
+</html>
