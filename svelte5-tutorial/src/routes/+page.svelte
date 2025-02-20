@@ -1,24 +1,48 @@
 <script lang="ts">
-  // Component Imports
-  import Header from './header.svelte';
+  import Header from './Header.svelte';
 
-  // Component Variables
-  let name = $state('Kory');
-  let status: 'OPEN'| 'CLOSED' = $state('OPEN');
-
-  let full_name = $derived(`${name} Hoopes`);
-
-  function onclick() {
-    status = status === 'OPEN' ? 'CLOSED' : 'OPEN';
-  }
-
+  let formState = $state({
+    name: "",
+    birthday: "",
+    step: 0,
+    error: ''
+  });
 </script>
 
-<Header {name} fake_name="Bobby" />
+<main>
+  <Header name={formState.name} />
 
-<h2>{full_name}</h2>
+  <p>Step: {formState.step + 1}</p>
 
-<input type="text" bind:value={name} />
+  {@render formStep({
+    question: 'What is your name',
+    id: 'name',
+    type: 'text'
+  })}
 
-<p>The store is now {status}</p>
-<button {onclick}>Toggle Status</button>
+  
+
+  {#if formState.error}
+    <p class="error">{formState.error}</p>
+  {/if}
+
+</main>
+
+{#snippet formStep({question, id, type}: {
+  type: string;
+  id: string;
+  question: string;
+})}
+  <article>
+    <div>
+      <label for={id}>{question}</label>
+      <input type={type} {id} bind:value={formState[id]}>
+    </div>
+  </article> 
+{/snippet}
+
+<style>
+  .error {
+    color: red;
+  }
+</style>

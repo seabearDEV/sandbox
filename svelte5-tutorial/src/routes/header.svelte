@@ -1,17 +1,15 @@
 <script lang="ts">
+	import type { Snippet } from "svelte";
+
   let {
-    name,
-    fake_name
+    name
   }: {
     name: string;
-    fake_name?: string;
   } = $props();
 </script>
 
-<h1>Hello {name}</h1>
-<h2>{name.replace("y", "x")}</h2>
-{fake_name}
-
-<style>
-
-</style>
+<div>
+  <h1>
+    {name ? name : 'User'}'s Form
+  </h1>
+</div>
