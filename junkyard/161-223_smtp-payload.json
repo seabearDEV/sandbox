@@ -1,0 +1,11 @@
+{
+	"smtpServer": "smtp.broadcom.com",
+	"port": "25",
+	"encryption": { "type": "None", "verifyCertificate": true },
+	"userName": "admin",
+	"userPassword": "@@EMPTYPASSWORD@@",
+	"from": "kory.hoopes@broadcom.com",
+	"to": ["kory@hey.com"],
+	"cc": ["kory@test.com"],
+	"bcc": null
+}
