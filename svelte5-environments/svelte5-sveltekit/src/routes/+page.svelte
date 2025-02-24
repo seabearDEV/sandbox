@@ -1,12 +1,7 @@
-<!-- TypeScript-->
 <script lang="ts">
-	// Svelte Imports
 	import { onMount } from 'svelte';
-
-	// Component Imports
 	import Header from './header.svelte';
 
-	// Component Variables
 	let mounted = false;
 
 	onMount(() => {
@@ -14,6 +9,19 @@
 	});
 </script>
 
-<!-- Content -->
-<Header />
+{#if mounted}
+	<wa-page>
+	<header slot="header" class="header">
+		<Header />
+	</header>
+</wa-page>
+{/if}
 
+<style>
+	.header {
+		background-color: #333;
+		color: white;
+		padding: 1rem;
+		text-align: center;
+	}
+</style>

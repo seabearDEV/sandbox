@@ -1,5 +1,4 @@
 <script lang="ts">
-
 </script>
 
-Hello.
+<h1>Header Content Here</h1>
