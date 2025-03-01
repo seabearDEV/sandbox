@@ -1,40 +1,34 @@
 import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
+import { getDataFilePath, getDataDir } from './utils/paths';
 import { CodexData } from './types';
 import chalk from 'chalk';
 
-// Define data storage location
-const DATA_DIR = path.join(os.homedir(), '.codexcli');
-const DATA_FILE = path.join(DATA_DIR, 'data.json');
+// Get the data file path from the utility
+const DATA_FILE = getDataFilePath();
 
 /**
  * Ensure data directory exists
  */
 function ensureDataDir(): void {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
+  // This is now handled in the paths.ts utility
+  // getDataDir() ensures the directory exists
 }
 
 /**
  * Load data from storage
  */
 export function loadData(): CodexData {
-  ensureDataDir();
-  
-  // Initialize with empty object if file doesn't exist
-  if (!fs.existsSync(DATA_FILE)) {
-    saveData({}); // Create the file with empty object
-    return {};
-  }
-  
   try {
+    if (!fs.existsSync(DATA_FILE)) {
+      saveData({});
+      return {};
+    }
+    
     const fileContent = fs.readFileSync(DATA_FILE, 'utf8');
     
     // Handle empty file case
     if (!fileContent || fileContent.trim() === '') {
-      saveData({}); // Rewrite with valid empty JSON object
+      saveData({}); 
       return {};
     }
     
@@ -53,7 +47,6 @@ export function loadData(): CodexData {
  * Save data to storage
  */
 export function saveData(data: CodexData): void {
-  ensureDataDir();
   try {
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
   } catch (error) {
@@ -64,7 +57,6 @@ export function saveData(data: CodexData): void {
 /**
  * Standardized error handling
  */
-// Enhanced error handling with colorized errors
 export function handleError(message: string, error?: unknown): void {
   console.error(chalk.red('ERROR: ') + message);
   if (error) {

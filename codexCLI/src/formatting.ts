@@ -1,4 +1,7 @@
 import chalk from 'chalk';
+import * as path from 'path';
+import * as os from 'os';
+import { getDataFilePath, isDev } from './utils/paths';
 
 /**
  * Format and output data with colors based on nesting level
@@ -84,6 +87,11 @@ export function showHelp(): void {
   console.log(`  ${chalk.yellow('codexcli')} ${chalk.green('get')} ${chalk.cyan('server.ip')}`);
   console.log(`  ${chalk.yellow('codexcli')} ${chalk.green('list')} ${chalk.cyan('server')}`);
   console.log(`  ${chalk.yellow('codexcli')} ${chalk.green('find')} 192.168.1.100\n`);
+  
+  // Data file location section - use the utility
+  const DATA_FILE = getDataFilePath();
+  const envLabel = isDev() ? chalk.yellow('[DEV] ') : '';
+  
+  console.log(chalk.bold.magenta('DATA STORAGE:'));
+  console.log(`  ${envLabel}${chalk.white('All entries are stored in:')} ${chalk.cyan(DATA_FILE)}\n`);
 }
-
-// Other formatting functions as needed...

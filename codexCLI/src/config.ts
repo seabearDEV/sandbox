@@ -1,9 +1,8 @@
 import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
+import { getConfigFilePath } from './utils/paths';
 
-const CONFIG_DIR = path.join(os.homedir(), '.codexcli');
-const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
+// Get the config file path from the utility
+const CONFIG_FILE = getConfigFilePath();
 
 // Make sure to export the interface
 export interface UserConfig {
@@ -26,9 +25,6 @@ export function loadConfig(): UserConfig {
 
 export function saveConfig(config: UserConfig): void {
   try {
-    if (!fs.existsSync(CONFIG_DIR)) {
-      fs.mkdirSync(CONFIG_DIR, { recursive: true });
-    }
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
   } catch (error) {
     console.error('Error saving config:', error);
