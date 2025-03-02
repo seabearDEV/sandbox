@@ -6,7 +6,7 @@
  * that the storage directory exists before attempting file operations.
  */
 import * as fs from 'fs';
-import { getDataFilePath, getDataDir } from './utils/paths';
+import { getDataFilePath } from './utils/paths';
 import { CodexData } from './types';
 import chalk from 'chalk';
 
@@ -16,16 +16,7 @@ import chalk from 'chalk';
  */
 const DATA_FILE = getDataFilePath();
 
-/**
- * Ensure data directory exists
- * 
- * This function is kept for documentation purposes but actual directory creation
- * is now handled by the paths.ts utility through getDataDir()
- */
-function ensureDataDir(): void {
-  // This is now handled in the paths.ts utility
-  // getDataDir() ensures the directory exists
-}
+// Note: Directory creation is handled by getDataFilePath() from utils/paths
 
 /**
  * Load data from storage

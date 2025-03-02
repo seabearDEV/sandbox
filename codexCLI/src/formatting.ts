@@ -6,8 +6,6 @@
  * It uses the chalk library for terminal styling.
  */
 import chalk from 'chalk';
-import * as path from 'path';
-import * as os from 'os';
 import { getDataFilePath, isDev } from './utils/paths';
 
 /**

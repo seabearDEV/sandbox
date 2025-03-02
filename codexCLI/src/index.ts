@@ -5,7 +5,6 @@
  * defines all available commands and their behaviors, and handles execution flow.
  */
 import { Command } from 'commander';  // Command line arguments parser
-import chalk from 'chalk';            // Terminal text styling
 import { showHelp } from './formatting';
 import { addEntry, getEntry, listEntries, removeEntry, searchEntries } from './commands';
 import { loadConfig, saveConfig, UserConfig } from './config';
@@ -147,18 +146,4 @@ if (process.argv.length <= 2) {
   showHelp();
 } else {
   codexCLI.parse(process.argv);
-}
-
-/**
- * Utility function for conditional debug logging
- * Only outputs when --debug flag is provided
- * 
- * @param {string} message - Debug message to display
- * @param {any} [data] - Optional data to serialize and display
- */
-function debug(message: string, data?: any): void {
-  if (process.env.DEBUG === 'true') {
-    console.log(chalk.gray(`[DEBUG] ${message}`));
-    if (data) console.log(chalk.gray(JSON.stringify(data, null, 2)));
-  }
 }
