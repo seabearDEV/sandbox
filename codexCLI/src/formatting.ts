@@ -1,3 +1,10 @@
+/**
+ * Formatting utilities for CodexCLI
+ * 
+ * This module provides functions for styling console output with colors,
+ * formatting data in consistent ways, and generating help text.
+ * It uses the chalk library for terminal styling.
+ */
 import chalk from 'chalk';
 import * as path from 'path';
 import * as os from 'os';
@@ -5,6 +12,10 @@ import { getDataFilePath, isDev } from './utils/paths';
 
 /**
  * Format and output data with colors based on nesting level
+ * 
+ * Takes any data object and formats it as JSON with indentation
+ * 
+ * @param {any} data - The data object to format and display
  */
 export function formatOutput(data: any): void {
   console.log(JSON.stringify(data, null, 2));
@@ -12,6 +23,12 @@ export function formatOutput(data: any): void {
 
 /**
  * Display key-value pairs with colored keys based on nesting level
+ * 
+ * Uses different colors for each level of a nested key (separated by dots)
+ * to improve readability in hierarchical data
+ * 
+ * @param {string} key - The key to format (may contain dots for nesting)
+ * @param {string} value - The value to display
  */
 export function formatKeyValue(key: string, value: string): void {
   // Split the key by dots to get levels
@@ -50,6 +67,10 @@ export function formatKeyValue(key: string, value: string): void {
 
 /**
  * Display a colorful help message
+ * 
+ * Generates and prints a formatted help screen with command usage,
+ * available commands, examples, and data storage location.
+ * Uses color coding to improve readability and visual appeal.
  */
 export function showHelp(): void {
   // Title and header with box styling

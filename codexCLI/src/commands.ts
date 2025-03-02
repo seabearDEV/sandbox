@@ -1,17 +1,39 @@
+/**
+ * Implementation of core CodexCLI commands
+ * 
+ * This module contains the business logic for all CLI commands,
+ * handling data operations and user feedback. Each command function 
+ * corresponds to a CLI command defined in index.ts.
+ */
 import { loadData, saveData, handleError } from './storage';
 import { setNestedValue, getNestedValue, removeNestedValue, flattenObject } from './utils';
 import { formatKeyValue } from './formatting';
-import chalk from 'chalk'; 
-import ora from 'ora';
+import chalk from 'chalk';  // Terminal text styling
+import ora from 'ora';      // Terminal spinner for async operations
 
+/**
+ * Prints a success message with a green checkmark
+ * @param {string} message - The success message to display
+ */
 function printSuccess(message: string): void {
   console.log(chalk.green('✓ ') + message);
 }
 
+/**
+ * Prints a warning message with a yellow warning symbol
+ * @param {string} message - The warning message to display
+ */
 function printWarning(message: string): void {
   console.log(chalk.yellow('⚠ ') + message);
 }
 
+/**
+ * Adds or updates a data entry in storage
+ * Supports nested properties via dot notation (e.g., 'user.name')
+ * 
+ * @param {string} key - The key for the entry
+ * @param {string} value - The value to store
+ */
 export function addEntry(key: string, value: string): void {
   try {
     const data = loadData();
@@ -30,6 +52,13 @@ export function addEntry(key: string, value: string): void {
   }
 }
 
+/**
+ * Retrieves and displays a data entry by its key
+ * Supports nested access via dot notation and different output formats
+ * 
+ * @param {string} key - The key to look up
+ * @param {Object} options - Display options (e.g., {raw: true} for unformatted output)
+ */
 export function getEntry(key: string, options: any = {}): void {
   const data = loadData();
   
@@ -71,6 +100,12 @@ export function getEntry(key: string, options: any = {}): void {
   }
 }
 
+/**
+ * Lists all entries in storage with optional path filtering
+ * Displays entries in a formatted, hierarchical view
+ * 
+ * @param {string} [path] - Optional path prefix to filter displayed entries
+ */
 export function listEntries(path?: string): void {
   const spinner = ora('Loading data...').start();
   
@@ -124,6 +159,12 @@ export function listEntries(path?: string): void {
   }
 }
 
+/**
+ * Removes an entry from storage by its key
+ * Supports nested properties via dot notation
+ * 
+ * @param {string} key - The key of the entry to remove
+ */
 export function removeEntry(key: string): void {
   const data = loadData();
   let removed = false;
@@ -152,8 +193,10 @@ export function removeEntry(key: string): void {
 }
 
 /**
- * Search for entries by key or value
- * @param searchTerm The term to search for
+ * Searches for entries by key or value
+ * Performs a case-insensitive search across all entries
+ * 
+ * @param {string} searchTerm - The term to search for in keys and values
  */
 export function searchEntries(searchTerm: string): void {
   const data = loadData();
