@@ -7,9 +7,10 @@
  */
 import { loadData, saveData, handleError } from './storage';
 import { setNestedValue, getNestedValue, removeNestedValue, flattenObject } from './utils';
-import { formatKeyValue } from './formatting';
+import { formatKeyValue, displayTree } from './formatting';
+import { getAliasesForPath } from './alias';
 import chalk from 'chalk';  // Terminal text styling
-import ora from 'ora';      // Terminal spinner for async operations
+
 
 /**
  * Prints a success message with a green checkmark
@@ -62,7 +63,6 @@ export function addEntry(key: string, value: string): void {
 export function getEntry(key: string, options: any = {}): void {
   const data = loadData();
   
-  // Handle nested paths
   let value;
   if (key.includes('.')) {
     value = getNestedValue(data, key);
@@ -75,21 +75,23 @@ export function getEntry(key: string, options: any = {}): void {
     return;
   }
   
-  // Get string representation of the value
-  let stringValue: string;
-  if (typeof value === 'object' && value !== null) {
-    stringValue = JSON.stringify(value);
-  } else {
-    stringValue = String(value);
-  }
-  
   // Raw output for scripting
   if (options.raw) {
-    console.log(stringValue);
+    if (typeof value === 'object' && value !== null) {
+      console.log(JSON.stringify(value));
+    } else {
+      console.log(value);
+    }
     return;
   }
   
-  // Regular formatted output
+  // Tree display for objects when tree option is set
+  if (options.tree && typeof value === 'object' && value !== null) {
+    displayTree({ [key]: value });
+    return;
+  }
+  
+  // Existing formatted output
   if (typeof value === 'object' && value !== null) {
     const flatObj = flattenObject({ [key]: value }, '');
     Object.entries(flatObj).forEach(([k, v]) => {
@@ -101,28 +103,77 @@ export function getEntry(key: string, options: any = {}): void {
 }
 
 /**
+ * Applies different colors to each level of a path
+ * @param {string} path - The dot-separated path to colorize
+ * @returns {string} - The colorized path
+ */
+function colorizePathByLevels(path: string): string {
+  const colors = [chalk.cyan, chalk.yellow, chalk.green, chalk.magenta, chalk.blue];
+  const parts = path.split('.');
+  
+  // Apply a different color to each path segment
+  return parts.map((part, index) => {
+    const colorFn = colors[index % colors.length];
+    return colorFn(part);
+  }).join('.');
+}
+
+/**
  * Lists all entries in storage with optional path filtering
  * Displays entries in a formatted, hierarchical view
  * 
  * @param {string} [path] - Optional path prefix to filter displayed entries
+ * @param {Object} [options] - Display options (e.g., {tree: true} for tree view)
  */
-export function listEntries(path?: string): void {
-  const spinner = ora('Loading data...').start();
-  
+export function listEntries(path?: string, options: any = {}): void {
   try {
     const data = loadData();
-    spinner.succeed('Data loaded');
+    
+    // Debug log to verify options
+    if (process.env.DEBUG === 'true') {
+      console.log('Options received:', options);
+    }
     
     if (Object.keys(data).length === 0) {
       console.log('No entries found.');
       return;
     }
     
-    // Flatten nested objects for display
+    // Handle tree display if option is set
+    if (options.tree === true) {
+      if (process.env.DEBUG === 'true') {
+        console.log('Tree display enabled');
+      }
+      
+      if (path) {
+        // For a specific path, create a sub-object with just that branch
+        const pathParts = path.split('.');
+        let current: any = data;
+        
+        // Navigate to the requested path
+        for (let i = 0; i < pathParts.length; i++) {
+          const part = pathParts[i];
+          if (current[part] === undefined) {
+            console.log(`Path '${path}' not found.`);
+            return;
+          }
+          current = current[part];
+        }
+        
+        // Display just this subtree
+        displayTree({ [path]: current });
+      } else {
+        // Display the complete tree
+        displayTree(data);
+      }
+      return;
+    }
+    
+    // Normal flat display (existing code)
     const flattenedData = flattenObject(data);
     
-    // If path is provided, filter entries to show only those under that path
     if (path) {
+      // Filter by path prefix
       const filteredEntries: Record<string, string> = {};
       const prefix = path + '.';
       
@@ -131,7 +182,7 @@ export function listEntries(path?: string): void {
         filteredEntries[path] = flattenedData[path];
       }
       
-      // Include all children (entries starting with path + '.')
+      // Include all children
       Object.entries(flattenedData).forEach(([key, value]) => {
         if (key.startsWith(prefix)) {
           filteredEntries[key] = value;
@@ -142,19 +193,32 @@ export function listEntries(path?: string): void {
         console.log(`No entries found under '${path}'.`);
         return;
       }
-      
-      // Display filtered data with color-coded keys
-      Object.entries(filteredEntries).forEach(([key, value]) => {
-        formatKeyValue(key, value);
-      });
-    } else {
-      // Display all entries with color-coded keys
-      Object.entries(flattenedData).forEach(([key, value]) => {
-        formatKeyValue(key, value);
-      });
     }
+
+    // Format and display entries, now with aliases
+    Object.entries(flattenedData).forEach(([key, value]) => {
+      // Get the full path for this entry
+      const fullPath = path ? `${path}.${key}` : key;
+      
+      // Find aliases that point to this path
+      const aliases = getAliasesForPath(fullPath);
+      
+      // Format the value as needed
+      const displayValue = typeof value === 'object' 
+        ? chalk.gray('[Object]') 
+        : value.toString();
+      
+      // Apply different colors to each level of the path
+      const colorizedPath = colorizePathByLevels(fullPath);
+      
+      // Display with the format: path (alias) content
+      if (aliases.length > 0) {
+        console.log(`${colorizedPath} ${chalk.blue('(' + aliases[0] + ')')} ${displayValue}`);
+      } else {
+        console.log(`${colorizedPath} ${displayValue}`);
+      }
+    });
   } catch (error) {
-    spinner.fail('Failed to load data');
     handleError('Error listing entries:', error);
   }
 }
@@ -197,8 +261,9 @@ export function removeEntry(key: string): void {
  * Performs a case-insensitive search across all entries
  * 
  * @param {string} searchTerm - The term to search for in keys and values
+ * @param {Object} options - Display options (e.g., {tree: true} for tree view)
  */
-export function searchEntries(searchTerm: string): void {
+export function searchEntries(searchTerm: string, options: any = {}): void {
   const data = loadData();
   
   if (Object.keys(data).length === 0) {
@@ -228,7 +293,18 @@ export function searchEntries(searchTerm: string): void {
   
   console.log(`Found ${Object.keys(matches).length} matches for '${searchTerm}':`);
   
-  // Display matches with color-coded keys
+  // Use tree display if requested
+  if (options?.tree) {
+    // Create an object with just the matching entries
+    const matchesObj = {};
+    Object.keys(matches).forEach(key => {
+      setNestedValue(matchesObj, key, matches[key]);
+    });
+    displayTree(matchesObj);
+    return;
+  }
+  
+  // Default display with color-coded keys
   Object.entries(matches).forEach(([key, value]) => {
     formatKeyValue(key, value);
   });

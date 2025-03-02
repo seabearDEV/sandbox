@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * Main entry point for CodexCLI application
  * 
@@ -8,6 +10,8 @@ import { Command } from 'commander';  // Command line arguments parser
 import { showHelp } from './formatting';
 import { addEntry, getEntry, listEntries, removeEntry, searchEntries } from './commands';
 import { loadConfig, saveConfig, UserConfig } from './config';
+import { setAlias, removeAlias, resolveKey, loadAliases } from './alias';
+import chalk from 'chalk';
 
 // Initialize the main command object
 const codexCLI = new Command();
@@ -18,7 +22,7 @@ const codexCLI = new Command();
  */
 codexCLI
   .version('1.0.0')
-  .description('Command Line Information Storage and Retrieval');
+  .description('CodexCLI - Command Line Information Store');
 
 /**
  * Global CLI options
@@ -42,8 +46,9 @@ codexCLI
   .command('add <key> <value...>')
   .description('Add or update an entry')
   .action((key, valueArray) => {
+    const resolvedKey = resolveKey(key);
     const value = valueArray.join(' ');
-    addEntry(key, value);
+    addEntry(resolvedKey, value);
   });
 
 /**
@@ -56,9 +61,10 @@ codexCLI
   .command('get <key>')
   .description('Retrieve an entry')
   .option('--raw', 'Output raw value without formatting')
+  .option('--tree', 'Display hierarchical data in a tree structure')
   .action((key, options) => {
-    console.log(`Executing get with options:`, options);
-    getEntry(key, options);
+    const resolvedKey = resolveKey(key);
+    getEntry(resolvedKey, options);
   });
 
 /**
@@ -69,8 +75,13 @@ codexCLI
 codexCLI
   .command('list [path]')
   .description('List all entries or entries under specified path')
-  .action((path) => {
-    listEntries(path);
+  .option('--tree', 'Display hierarchical data in a tree structure')
+  .action((path, options) => {
+    // Debug log to verify option parsing
+    if (process.env.DEBUG === 'true') {
+      console.log('Command options:', options);
+    }
+    listEntries(path, options);
   });
 
 /**
@@ -81,8 +92,9 @@ codexCLI
 codexCLI
   .command('find <term>')
   .description('Find entries by key or value')
-  .action((term) => {
-    searchEntries(term);
+  .option('--tree', 'Display hierarchical data in a tree structure')
+  .action((term, options) => {
+    searchEntries(term, options);
   });
 
 /**
@@ -94,7 +106,8 @@ codexCLI
   .command('remove <key>')
   .description('Remove an entry')
   .action((key) => {
-    removeEntry(key);
+    const resolvedKey = resolveKey(key);
+    removeEntry(resolvedKey);
   });
 
 /**
@@ -127,6 +140,73 @@ codexCLI
   .description('Display help information')
   .action(() => {
     showHelp();
+  });
+
+/**
+ * Command: alias
+ * Manages aliases for paths
+ * @param {string} action - Action to perform: set, get, list, remove
+ * @param {string} [alias] - Alias name
+ * @param {string} [path] - Path for the alias (required for set action)
+ */
+codexCLI
+  .command('alias')
+  .description('Manage aliases for paths')
+  .argument('<action>', 'Action to perform: set, get, list, remove')
+  .argument('[alias]', 'Alias name')
+  .argument('[path]', 'Path for the alias (required for set action)')
+  .action((action, alias, path) => {
+    switch (action) {
+      case 'set':
+        if (!alias || !path) {
+          console.error('Both alias and path are required for set action');
+          return;
+        }
+        setAlias(alias, path);
+        console.log(`Alias '${chalk.green(alias)}' now points to '${chalk.cyan(path)}'`);
+        break;
+        
+      case 'get':
+        if (!alias) {
+          console.error('Alias name is required');
+          return;
+        }
+        const aliases = loadAliases();
+        if (aliases[alias]) {
+          console.log(`Alias '${chalk.green(alias)}' points to '${chalk.cyan(aliases[alias])}'`);
+        } else {
+          console.log(`Alias '${chalk.yellow(alias)}' not found`);
+        }
+        break;
+        
+      case 'list':
+        const allAliases = loadAliases();
+        if (Object.keys(allAliases).length === 0) {
+          console.log('No aliases defined');
+          return;
+        }
+        console.log(chalk.bold('Defined aliases:'));
+        Object.entries(allAliases).forEach(([alias, targetPath]) => {
+          console.log(`${chalk.green(alias.padEnd(15))} ${chalk.gray('→')} ${chalk.cyan(targetPath)}`);
+        });
+        break;
+        
+      case 'remove':
+        if (!alias) {
+          console.error('Alias name is required');
+          return;
+        }
+        if (removeAlias(alias)) {
+          console.log(`Alias '${chalk.green(alias)}' removed`);
+        } else {
+          console.log(`Alias '${chalk.yellow(alias)}' not found`);
+        }
+        break;
+        
+      default:
+        console.error(`Unknown action: ${action}`);
+        console.log('Valid actions: set, get, list, remove');
+    }
   });
 
 /**

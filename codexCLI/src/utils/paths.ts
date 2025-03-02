@@ -5,8 +5,8 @@
  * It automatically determines the appropriate storage locations based on the execution
  * environment (development vs. production) and ensures the necessary directories exist.
  */
-import * as path from 'path';
-import * as os from 'os';
+import path from 'path';
+import os from 'os';
 import * as fs from 'fs';
 
 /**
@@ -34,10 +34,23 @@ export function isDev(): boolean {
 }
 
 /**
+ * Get the directory where data files should be stored
+ */
+export function getDataDirectory(): string {
+  // For development, use the local data directory
+  if (process.env.NODE_ENV === 'development') {
+    return path.join(process.cwd(), 'data');
+  }
+  
+  // For production, use ~/.codexcli
+  return path.join(os.homedir(), '.codexcli');
+}
+
+/**
  * Gets the appropriate directory for storing application data
  * 
  * Uses different locations based on the execution environment:
- * - Development: Creates a .dev-data directory in the project root
+ * - Development: Uses the project root directory
  * - Production: Uses ~/.codexcli directory in the user's home folder
  * 
  * Automatically ensures the target directory exists before returning.
@@ -46,16 +59,9 @@ export function isDev(): boolean {
  */
 export function getDataDir(): string {
   if (isDev()) {
-    // In development mode, use a directory in the project
+    // In development mode, use the project root directory
     const projectDir = path.resolve(__dirname, '..', '..');
-    const devDataDir = path.join(projectDir, '.dev-data');
-
-    // Ensure directory exists
-    if (!fs.existsSync(devDataDir)) {
-      fs.mkdirSync(devDataDir, { recursive: true });
-    }
-
-    return devDataDir;
+    return projectDir;
   } else {
     // In production mode, use the user's home directory
     const prodDataDir = path.join(os.homedir(), '.codexcli');
@@ -70,12 +76,83 @@ export function getDataDir(): string {
 }
 
 /**
- * Gets the full path to the data storage file
+ * Returns the path to the data file
  * 
- * @returns {string} Absolute path to the JSON data file
+ * @returns {string} Path to the data.json file
  */
 export function getDataFilePath(): string {
-  return path.join(getDataDir(), 'data.json');
+  if (isDev()) {
+    // In development mode, use data/data.json in the project root
+    const projectDir = path.resolve(__dirname, '..', '..');
+    return path.join(projectDir, 'data', 'data.json');
+  } else {
+    // In production mode, use data.json in the dist/data directory
+    const distDir = path.resolve(__dirname, '..', '..');
+    return path.join(distDir, 'dist', 'data', 'data.json');
+  }
+}
+
+/**
+ * Get the path to the aliases file
+ */
+export function getAliasFilePath(): string {
+  return path.join(getDataDirectory(), 'aliases.json');
+}
+
+/**
+ * Ensures data.json exists in the appropriate location
+ * Copies the sample file to user directory in production if needed
+ */
+export function ensureDataFileExists(): void {
+  const dataFilePath = getDataFilePath();
+  
+  if (!fs.existsSync(dataFilePath)) {
+    if (isDev()) {
+      // In development, create an empty data file
+      fs.writeFileSync(dataFilePath, JSON.stringify({}, null, 2), 'utf8');
+    } else {
+      // In production, copy the sample data.json from the package
+      let samplePath;
+      
+      // Try multiple possible locations for the sample data file
+      const possiblePaths = [
+        // Path for when running from dist directory
+        path.join(__dirname, '../../data.json'),
+        // Path relative to the current file
+        path.join(__dirname, '../data.json'),
+        // Path using require to find package root
+        path.join(path.dirname(require.resolve('@your-package-name/package.json', { paths: [process.cwd()] })), 'data.json')
+      ];
+      
+      // Find the first valid path
+      for (const possiblePath of possiblePaths) {
+        if (fs.existsSync(possiblePath)) {
+          samplePath = possiblePath;
+          break;
+        }
+      }
+      
+      if (samplePath && fs.existsSync(samplePath)) {
+        fs.copyFileSync(samplePath, dataFilePath);
+      } else {
+        // Fallback if sample file not found
+        fs.writeFileSync(dataFilePath, JSON.stringify({
+          "snippets": {
+            "welcome": {
+              "content": "Welcome to CodexCLI! This is a sample snippet to get you started.",
+              "tags": ["sample", "welcome"],
+              "created": new Date().toISOString()
+            },
+            "example": {
+              "content": "This is an example showing how to structure your snippets.",
+              "tags": ["sample", "example"],
+              "created": new Date().toISOString()
+            }
+          }
+        }, null, 2), 'utf8');
+      }
+    }
+  }
 }
 
 /**

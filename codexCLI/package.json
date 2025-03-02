@@ -1,9 +1,18 @@
 {
 	"name": "codexcli",
 	"version": "1.0.0",
+	"bin": {
+		"ccli": "dist/index.js"
+	},
+	"files": [
+		"dist",
+		"bin",
+		"README.md",
+		"LICENSE"
+	],
 	"main": "index.js",
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc && mkdir -p dist/data && cp -r data/* dist/data/ && cp -r src/utils dist/",
 		"start": "node dist/index.js",
 		"dev": "NODE_ENV=development ts-node src/index.ts",
 		"watch": "NODE_ENV=development nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"

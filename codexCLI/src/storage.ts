@@ -6,7 +6,7 @@
  * that the storage directory exists before attempting file operations.
  */
 import * as fs from 'fs';
-import { getDataFilePath } from './utils/paths';
+import { getDataFilePath, ensureDataFileExists } from './utils/paths';
 import { CodexData } from './types';
 import chalk from 'chalk';
 
@@ -16,7 +16,7 @@ import chalk from 'chalk';
  */
 const DATA_FILE = getDataFilePath();
 
-// Note: Directory creation is handled by getDataFilePath() from utils/paths
+// Note: Directory creation and data file initialization is handled by utils/paths
 
 /**
  * Load data from storage
@@ -28,16 +28,14 @@ const DATA_FILE = getDataFilePath();
  */
 export function loadData(): CodexData {
   try {
-    if (!fs.existsSync(DATA_FILE)) {
-      saveData({});
-      return {};
-    }
+    // Ensure data file exists (will copy sample data if in production)
+    ensureDataFileExists();
     
     const fileContent = fs.readFileSync(DATA_FILE, 'utf8');
     
     // Handle empty file case
     if (!fileContent || fileContent.trim() === '') {
-      saveData({}); 
+      saveData({});
       return {};
     }
     
