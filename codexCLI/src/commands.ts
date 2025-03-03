@@ -9,7 +9,7 @@ import { loadData, saveData, handleError } from './storage';
 import { setNestedValue, getNestedValue, removeNestedValue, flattenObject } from './utils';
 import { formatKeyValue, displayTree } from './formatting';
 import { getAliasesForPath } from './alias';
-import chalk from 'chalk';  // Terminal text styling
+import chalk from 'chalk';
 
 
 /**
