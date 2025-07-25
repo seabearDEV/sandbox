@@ -1,0 +1,94 @@
+{
+    "metadata": {
+        "appName": "Matrix Notes",
+        "version": "1.0.0",
+        "currentDate": "2025-07-27",
+        "currentTime": "12:37:30"
+    },
+    "notes": {
+        "2025-07-25": {
+            "date": "2025-07-25",
+            "dayName": "Friday",
+            "versions": [
+                {
+                    "time": "09:15:00",
+                    "content": "Morning meeting notes - Project kickoff discussion",
+                    "tags": ["meeting", "project"],
+                    "lastModified": "2025-07-25T09:15:00Z"
+                },
+                {
+                    "time": "14:30:00",
+                    "content": "Design review feedback - UI improvements needed",
+                    "tags": ["design", "feedback"],
+                    "lastModified": "2025-07-25T14:30:00Z"
+                }
+            ]
+        },
+        "2025-07-26": {
+            "date": "2025-07-26",
+            "dayName": "Saturday",
+            "versions": [
+                {
+                    "time": "10:00:00",
+                    "content": "Weekend project ideas - Build a matrix navigation app",
+                    "tags": ["personal", "ideas"],
+                    "lastModified": "2025-07-26T10:00:00Z"
+                },
+                {
+                    "time": "16:45:00",
+                    "content": "Research on data structures for time-based navigation",
+                    "tags": ["research", "development"],
+                    "lastModified": "2025-07-26T16:45:00Z"
+                }
+            ]
+        },
+        "2025-07-27": {
+            "date": "2025-07-27",
+            "dayName": "Sunday",
+            "versions": [
+                {
+                    "time": "08:30:00",
+                    "content": "Morning thoughts - Need to implement version history",
+                    "tags": ["planning"],
+                    "lastModified": "2025-07-27T08:30:00Z"
+                },
+                {
+                    "time": "12:12:10",
+                    "content": "Content goes here",
+                    "tags": ["draft"],
+                    "lastModified": "2025-07-27T12:12:10Z"
+                },
+                {
+                    "time": "12:37:30",
+                    "content": "Updated content goes here",
+                    "tags": ["draft", "updated"],
+                    "lastModified": "2025-07-27T12:37:30Z"
+                }
+            ]
+        },
+        "2025-07-28": {
+            "date": "2025-07-28",
+            "dayName": "Monday",
+            "versions": [
+                {
+                    "time": "09:00:00",
+                    "content": "Future planning - Monday tasks",
+                    "tags": ["planning", "future"],
+                    "lastModified": "2025-07-28T09:00:00Z"
+                }
+            ]
+        }
+    },
+    "navigation": {
+        "dateIndex": {
+            "2025-07-25": 0,
+            "2025-07-26": 1,
+            "2025-07-27": 2,
+            "2025-07-28": 3
+        },
+        "currentPosition": {
+            "dateIndex": 2,
+            "versionIndex": 2
+        }
+    }
+}

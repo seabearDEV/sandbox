@@ -1,0 +1,48 @@
+{
+    "currentDate": "2025-07-27",
+    "currentTime": "12:37:30",
+    "currentPosition": {
+        "dateIndex": 2,
+        "versionIndex": 2
+    },
+    "notes": {
+        "2025-07-27": {
+            "date": "2025-07-27",
+            "title": "July 27th, 2025",
+            "versions": [
+                {
+                    "time": "08:30:00",
+                    "content": "Morning thoughts - Need to implement version history"
+                },
+                {
+                    "time": "12:12:10",
+                    "content": "Content goes here"
+                },
+                {
+                    "time": "12:37:30",
+                    "content": "Updated content goes here"
+                }
+            ]
+        },
+        "2025-07-26": {
+            "date": "2025-07-26",
+            "title": "July 26th, 2025",
+            "versions": [
+                {
+                    "time": "10:00:00",
+                    "content": "Weekend project ideas"
+                }
+            ]
+        },
+        "2025-07-28": {
+            "date": "2025-07-28",
+            "title": "July 28th, 2025",
+            "versions": [
+                {
+                    "time": "09:00:00",
+                    "content": "Future planning"
+                }
+            ]
+        }
+    }
+}
