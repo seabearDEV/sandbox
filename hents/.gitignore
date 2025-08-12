@@ -1,8 +1,0 @@
-# Mac OS
-.DS_Store
-
-# Node.js
-node_modules/
-
-#Project dist folder
-dist/
