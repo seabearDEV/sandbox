@@ -31,31 +31,14 @@ struct ColorHelper {
     }
     
     static func getColorHex(_ color: Color) -> String {
-        let uiColor = UIColor(color)
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        
-        uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return String(format: "#%02X%02X%02X",
-                     Int(red * 255),
-                     Int(green * 255),
-                     Int(blue * 255))
+        let rgb = getRGBValues(color)
+        return String(format: "#%02X%02X%02X", rgb.r, rgb.g, rgb.b)
     }
     
     static func getRGBValues(_ color: Color) -> (r: Int, g: Int, b: Int) {
         let uiColor = UIColor(color)
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        
+        var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
         uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        return (
-            r: Int(red * 255),
-            g: Int(green * 255),
-            b: Int(blue * 255)
-        )
+        return (Int(red * 255), Int(green * 255), Int(blue * 255))
     }
 }

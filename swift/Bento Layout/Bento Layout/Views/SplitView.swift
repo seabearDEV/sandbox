@@ -9,13 +9,17 @@ import SwiftUI
 
 struct SplitView: View {
     @ObservedObject var node: SplitNode
-    var onDelete: (() -> Void)? = nil
-    var showDebug: Bool = false
+    let onDelete: (() -> Void)?
+    let showDebug: Bool
     @State private var showingMenu = false
     @State private var showingColorPicker = false
     @State private var selectedColor: Color = .blue
     
-    let colors: [Color] = SplitNode.colorOptions
+    init(node: SplitNode, onDelete: (() -> Void)? = nil, showDebug: Bool = false) {
+        self.node = node
+        self.onDelete = onDelete
+        self.showDebug = showDebug
+    }
     
     var body: some View {
         if node.isLeaf, let color = node.color {
@@ -144,11 +148,9 @@ struct SplitView: View {
     }
     
     private func splitArea(_ direction: SplitDirection) {
-        guard node.canSplit(direction) else {
-            return
-        }
+        guard node.canSplit(direction) else { return }
         
-        let newColor = colors.randomElement() ?? .gray
+        let newColor = SplitNode.colorOptions.randomElement() ?? .gray
         let newVerticalDepth = direction == .vertical ? node.verticalDepth + 1 : node.verticalDepth
         let newHorizontalDepth = direction == .horizontal ? node.horizontalDepth + 1 : node.horizontalDepth
         

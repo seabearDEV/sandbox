@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ExportView: View {
     let jsonString: String
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     @State private var copied = false
     
     var body: some View {

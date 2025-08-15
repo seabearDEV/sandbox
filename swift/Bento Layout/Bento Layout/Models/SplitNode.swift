@@ -8,7 +8,6 @@
 import SwiftUI
 import Combine
 
-/// Represents a node in the split tree
 class SplitNode: ObservableObject, Identifiable, Codable {
     let id: UUID
     @Published var children: [SplitNode] = []
@@ -20,7 +19,6 @@ class SplitNode: ObservableObject, Identifiable, Codable {
     static let maxVerticalDepth = 3
     static let maxHorizontalDepth = 2
     
-    // Color palette for the color picker
     static let colorOptions: [Color] = [
         Color(red: 0.0, green: 0.478, blue: 1.0),      // Blue
         Color(red: 1.0, green: 0.231, blue: 0.188),    // Red
@@ -95,15 +93,10 @@ class SplitNode: ObservableObject, Identifiable, Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(children, forKey: .children)
-        
-        // Encode axis as a simple string
-        let axisString = axis == .horizontal ? "horizontal" : "vertical"
-        try container.encode(axisString, forKey: .axis)
-        
+        try container.encode(axis == .horizontal ? "horizontal" : "vertical", forKey: .axis)
         try container.encode(verticalDepth, forKey: .verticalDepth)
         try container.encode(horizontalDepth, forKey: .horizontalDepth)
         
-        // Encode color as hex string
         if let color = color {
             let uiColor = UIColor(color)
             var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
@@ -115,23 +108,15 @@ class SplitNode: ObservableObject, Identifiable, Codable {
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(UUID.self, forKey: .id)
-        self.verticalDepth = try container.decode(Int.self, forKey: .verticalDepth)
-        self.horizontalDepth = try container.decode(Int.self, forKey: .horizontalDepth)
+        id = try container.decode(UUID.self, forKey: .id)
+        verticalDepth = try container.decode(Int.self, forKey: .verticalDepth)
+        horizontalDepth = try container.decode(Int.self, forKey: .horizontalDepth)
         
-        // Decode axis from string
         let axisString = try container.decode(String.self, forKey: .axis)
-        self.axis = axisString == "horizontal" ? Axis.horizontal : Axis.vertical
+        axis = axisString == "horizontal" ? .horizontal : .vertical
         
-        // Decode children
-        self.children = try container.decode([SplitNode].self, forKey: .children)
-        
-        // Decode color from hex string
-        if let hexString = try container.decodeIfPresent(String.self, forKey: .colorData) {
-            self.color = Color(hex: hexString)
-        } else {
-            self.color = nil
-        }
+        children = try container.decode([SplitNode].self, forKey: .children)
+        color = try container.decodeIfPresent(String.self, forKey: .colorData).map { Color(hex: $0) }
     }
 }
 

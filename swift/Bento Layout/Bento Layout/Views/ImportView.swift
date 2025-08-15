@@ -10,7 +10,7 @@ import SwiftUI
 struct ImportView: View {
     @Binding var jsonString: String
     let onImport: () -> Void
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationView {

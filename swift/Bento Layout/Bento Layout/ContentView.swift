@@ -8,17 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var rootNode = SplitNode(
-        color: SplitNode.defaultColor,
-        verticalDepth: 0,
-        horizontalDepth: 0
-    )
+    @StateObject private var rootNode = SplitNode(color: SplitNode.defaultColor)
     @State private var showDebug = false
     @State private var showingExportSheet = false
     @State private var showingImportSheet = false
     @State private var importJSON = ""
     @State private var showingImportAlert = false
-    var padding: CGFloat = 8
+    private let padding: CGFloat = 8
 
     var body: some View {
         VStack {
@@ -42,18 +38,14 @@ struct ContentView: View {
     
     private var headerView: some View {
         HStack {
-            
             Spacer()
-            
             headerButtons
         }
-        .padding(.horizontal)
-        .padding(.top)
+        .padding([.horizontal, .top])
     }
     
     private var headerButtons: some View {
         HStack(spacing: 8) {
-            // Export button
             Button(action: { showingExportSheet = true }) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.caption)
@@ -61,7 +53,6 @@ struct ContentView: View {
             .buttonStyle(.bordered)
             .help("Export layout")
             
-            // Import button
             Button(action: { showingImportSheet = true }) {
                 Image(systemName: "square.and.arrow.down")
                     .font(.caption)
@@ -69,7 +60,6 @@ struct ContentView: View {
             .buttonStyle(.bordered)
             .help("Import layout")
             
-            // Debug toggle
             Button(action: { showDebug.toggle() }) {
                 Image(systemName: showDebug ? "eye.fill" : "eye.slash.fill")
                     .font(.caption)
@@ -77,7 +67,6 @@ struct ContentView: View {
             .buttonStyle(.bordered)
             .help("Toggle debug overlay")
             
-            // Reset button
             Button("Reset") {
                 rootNode.color = SplitNode.defaultColor
                 rootNode.children = []

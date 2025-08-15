@@ -10,11 +10,9 @@ import SwiftUI
 struct ColorPickerView: View {
     @Binding var selectedColor: Color
     @ObservedObject var node: SplitNode
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     
-    let columns = [
-        GridItem(.adaptive(minimum: 60))
-    ]
+    private let columns = [GridItem(.adaptive(minimum: 60))]
     
     var body: some View {
         NavigationView {
@@ -62,18 +60,15 @@ private struct ColorCell: View {
             .fill(color)
             .frame(height: 60)
             .overlay(
-                Group {
-                    if isSelected {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.title2)
-                            .foregroundColor(.white)
-                            .background(
-                                Circle()
-                                    .fill(Color.black.opacity(0.6))
-                                    .padding(4)
-                            )
-                    }
-                }
+                isSelected ? 
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.title2)
+                    .foregroundColor(.white)
+                    .background(
+                        Circle()
+                            .fill(Color.black.opacity(0.6))
+                            .padding(4)
+                    ) : nil
             )
             .scaleEffect(isHighlighted ? 1.1 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: isHighlighted)
