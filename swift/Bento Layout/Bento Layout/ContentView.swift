@@ -14,12 +14,69 @@ struct ContentView: View {
     @State private var showingImportSheet = false
     @State private var importJSON = ""
     @State private var showingImportAlert = false
+    @State private var showingResetConfirmation = false
+    @State private var showingDebugInfo = false
     private let padding: CGFloat = 8
 
     var body: some View {
-        VStack {
-            headerView
+        VStack(spacing: 0) {
+            // Header bar
+            HStack {
+                // Title section
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Bento Layout")
+                        .font(.headline)
+                    Text("Tap any area to split or customize")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                
+                Spacer()
+                
+                // Action buttons
+                HStack(spacing: 12) {
+                    // Import/Export menu
+                    Menu {
+                        Button(action: { showingImportSheet = true }) {
+                            Label("Import Layout", systemImage: "square.and.arrow.down")
+                        }
+                        Button(action: { showingExportSheet = true }) {
+                            Label("Export Layout", systemImage: "square.and.arrow.up")
+                        }
+                    } label: {
+                        Label("File", systemImage: "folder")
+                            .labelStyle(.iconOnly)
+                    }
+                    .buttonStyle(.bordered)
+                    
+                    // View controls
+                    Button(action: { 
+                        showDebug.toggle()
+                        if showDebug {
+                            showingDebugInfo = true
+                        }
+                    }) {
+                        Image(systemName: showDebug ? "eye.slash" : "eye")
+                    }
+                    .buttonStyle(.bordered)
+                    
+                    Button(action: { 
+                        showingResetConfirmation = true
+                    }) {
+                        Image(systemName: "arrow.counterclockwise")
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.red)
+                }
+                .controlSize(.small)
+            }
+            .padding()
+            .background(Color(uiColor: .systemBackground))
+            .overlay(alignment: .bottom) {
+                Divider()
+            }
             
+            // Main content
             SplitView(node: rootNode, showDebug: showDebug)
                 .padding(padding)
         }
@@ -34,45 +91,19 @@ struct ContentView: View {
         } message: {
             Text("Failed to import layout. Please check the JSON format.")
         }
-    }
-    
-    private var headerView: some View {
-        HStack {
-            Spacer()
-            headerButtons
-        }
-        .padding([.horizontal, .top])
-    }
-    
-    private var headerButtons: some View {
-        HStack(spacing: 8) {
-            Button(action: { showingExportSheet = true }) {
-                Image(systemName: "square.and.arrow.up")
-                    .font(.caption)
-            }
-            .buttonStyle(.bordered)
-            .help("Export layout")
-            
-            Button(action: { showingImportSheet = true }) {
-                Image(systemName: "square.and.arrow.down")
-                    .font(.caption)
-            }
-            .buttonStyle(.bordered)
-            .help("Import layout")
-            
-            Button(action: { showDebug.toggle() }) {
-                Image(systemName: showDebug ? "eye.fill" : "eye.slash.fill")
-                    .font(.caption)
-            }
-            .buttonStyle(.bordered)
-            .help("Toggle debug overlay")
-            
-            Button("Reset") {
+        .confirmationDialog("Reset Layout?", isPresented: $showingResetConfirmation, titleVisibility: .visible) {
+            Button("Reset", role: .destructive) {
                 rootNode.color = SplitNode.defaultColor
                 rootNode.children = []
             }
-            .font(.caption)
-            .buttonStyle(.bordered)
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("This will clear your entire layout and start over. This action cannot be undone.")
+        }
+        .alert("Debug Information", isPresented: $showingDebugInfo) {
+            Button("Got it!") { }
+        } message: {
+            Text("Debug mode shows detailed information about each area including:\n\n• Vertical and horizontal split depths\n• Color names and hex values\n• RGB color values\n\nThis helps you understand the layout structure and constraints.")
         }
     }
     
